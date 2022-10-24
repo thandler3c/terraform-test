@@ -5,6 +5,9 @@
 *.tfstate
 *.tfstate.*
 
+**/Terraform - Silver/*
+
+
 # Crash log files
 crash.log
 

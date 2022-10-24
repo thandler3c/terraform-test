@@ -1,0 +1,58 @@
+name: terraform plan
+
+description: "The template used for running the packer step in GitHub Actions"
+
+# Were we can define the inputs that our action will accept
+inputs:
+  CLIENT_ID:
+    description: ""
+    required: true
+  CLIENT_SECRET:
+    description: ""
+    required: true
+  SUBSCRIPTION_ID:
+    description: ""
+    required: true
+  TENANT_ID:
+    description: ""
+    required: true
+      
+runs:
+  using: "composite"
+  # Defining the action steps(Just one step to be simple)
+
+  steps:
+    # This is using an archived version of the terraform actions. New version can be found here
+    # https://github.com/hashicorp/setup-terraform
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: "Terraform Format"
+      uses: hashicorp/terraform-github-actions@ae0d973bfdc4c81f01bc1de81109bba33e148f41
+      with:
+        tf_actions_version: 0.14.8
+        tf_actions_subcommand: "fmt"
+        tf_actions_working_dir: "./terraform"
+
+    - name: "Terraform Init"
+      uses: hashicorp/terraform-github-actions@ae0d973bfdc4c81f01bc1de81109bba33e148f41
+      with:
+        tf_actions_version: 0.14.8
+        tf_actions_subcommand: "init"
+        tf_actions_working_dir: "./terraform"
+
+    - name: "Terraform Validate"
+      uses: hashicorp/terraform-github-actions@ae0d973bfdc4c81f01bc1de81109bba33e148f41
+      with:
+        tf_actions_version: 0.14.8
+        tf_actions_subcommand: "validate"
+        tf_actions_working_dir: "./terraform"
+
+    - name: "Terraform Plan"
+      uses: hashicorp/terraform-github-actions@ae0d973bfdc4c81f01bc1de81109bba33e148f41
+      with:
+        tf_actions_version: 0.14.8
+        tf_actions_subcommand: "plan"
+        tf_actions_working_dir: "./terraform"
+
