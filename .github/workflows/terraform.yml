@@ -21,10 +21,21 @@ jobs:
         run: |
           echo "Hello Development"
     
+  terraform-qa-plan:
+    name: 'Terraform Plan - QA'
+    needs: terraform-dev-plan
+
+    runs-on: ubuntu-latest
+    environment: qa
+
+    steps:
+      - name: Echo Environment
+        run: |
+          echo "Hello QA"
 
   terraform-production-plan:
     name: 'Terraform Plan - prod'
-    needs: terraform-dev-plan
+    needs: terraform-qa-plan
 
     runs-on: ubuntu-latest
     environment: prod
