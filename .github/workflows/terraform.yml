@@ -8,10 +8,6 @@ on:
     branches:
       - development
       - main
-  pull_request:
-    branches: 
-      - main
-
 
 jobs:
   terraform-dev-plan:
@@ -19,97 +15,22 @@ jobs:
 
     runs-on: ubuntu-latest
     environment: dev
-    
-    if: ${{ github.ref == 'refs/heads/development' && github.event_name == 'push' }}
 
-    env:
-      ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
-
-    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
-    defaults:
-      run:
-        shell: bash
- 
     steps:
-    # Checkout the repository to the GitHub Actions runner
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Terraform
-        uses: "./.github/actions/terraform/plan"
-        with:
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
-          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-          SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
-          TENANT_ID: ${{ secrets.TENANT_ID }}
+      - name: Echo Environment
+        run: |
+          echo "Hello Development"
+    
 
   terraform-production-plan:
     name: 'Terraform Plan - prod'
+    needs: terraform-dev-plan
 
     runs-on: ubuntu-latest
     environment: prod
 
-    # if: ${{ github.base_ref == 'refs/heads/main' && github.event_name == 'pull_request' }}
-
-    env:
-      ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
-      EVENT_NAME: ${{ github.event.event_name }}
-
-    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
-    defaults:
-      run:
-        shell: bash 
- 
     steps:
-    # Checkout the repository to the GitHub Actions runner
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Terraform
-        uses: "./.github/actions/terraform/plan"
-        with:
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
-          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-          SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
-          TENANT_ID: ${{ secrets.TENANT_ID }}
-
-  terraform-production-apply:
-    name: 'Terraform Apply - prod'
-
-    runs-on: ubuntu-latest
-    environment: prod
-
-    if: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
-
-    env:
-      ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
-      EVENT_NAME: ${{ github.event.event_name }}
-
-    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
-    defaults:
-      run:
-        shell: bash 
- 
-
-    steps:
-    # Checkout the repository to the GitHub Actions runner
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Terraform
-        uses: "./.github/actions/terraform/apply"
-        with:
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
-          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-          SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
-          TENANT_ID: ${{ secrets.TENANT_ID }}
+      - name: Echo Environment
+        run: |
+          echo "Hello Production"
 
